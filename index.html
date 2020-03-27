@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="http://mockjs.com/dist/mock.js"></script>
+		
+		
+	</head>
+	<body>
+		
+		<table id="table" border="1">
+			<tr>
+				<td>雇员的姓名</td>
+				<td>雇员的年龄</td>
+				<td>雇员的衣服颜色</td>
+				<td>雇员的地址</td>
+				<td>雇员的邮政编码</td>
+				<td>雇员的email</td>
+				<td>雇员的照片</td>
+			</tr>
+		</table>
+		<input type="color" value="#f27989"/>
+		
+		<script>
+			var table=document.getElementById("table");
+			var data={
+				"employee":[]
+			}
+			for( t=0;t<=5;t++){
+				data.employee.push({
+					"name":Mock.Random.cname(),
+					"age|18-60":50,
+					"color":'@color',
+					"address":Mock.Random.county(true),
+					"code":Mock.Random.zip(),
+					"email":Mock.Random.email("qq.com"),
+					"image":Mock.Random.image('200x100', '#50B347', '#FFF', 'Mock.js')
+				})
+			}
+			var mock1=Mock.mock("http://www.data.server.com",{
+				data
+			});
+			
+			console.log(data);
+			 var xhr=new XMLHttpRequest();
+			xhr.open("get","http://www.data.server.com");
+			xhr.send(null);
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4 &&xhr.status==200){
+					var data_str=xhr.responseText;
+					console.log(data_str);
+					var data_json=JSON.parse(data_str);
+					var arr=data_json['data']['employee'];
+					for(var t=0;t<arr.length;t++){
+						  var tr=document.createElement("tr");
+						    table.appendChild(tr);
+						
+						for(key in arr[t]){
+							var td=document.createElement("td");
+							if(key=="image"){
+								var img=document.createElement("img");
+								img.src=arr[t][key];
+								console.log(img);
+								td.appendChild(img)
+								 tr.appendChild(td);
+							}else{
+							 
+							 td.innerHTML=arr[t][key];
+							 
+							 tr.appendChild(td);
+							 }
+						}
+					}
+				}
+			} 
+		</script>
+	</body>
+</html>
